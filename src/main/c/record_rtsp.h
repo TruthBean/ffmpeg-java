@@ -2,7 +2,6 @@
 #define FFMPEG_NODEJS_RECORD_RTSP_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavformat/avio.h>

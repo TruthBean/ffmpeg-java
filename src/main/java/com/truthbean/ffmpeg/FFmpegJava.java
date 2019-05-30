@@ -1,7 +1,6 @@
 package com.truthbean.ffmpeg;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 import com.truthbean.ffmpeg.model.FFmpegInputParams;
 import com.truthbean.ffmpeg.model.ImageBuffer;
@@ -16,7 +15,7 @@ public class FFmpegJava implements Closeable {
 
     private static final Object REFERENCE = new Object();
 
-    private volatile long visPointer;
+    private long visPointer;
 
     /**
      * @param visPointer the visPointer to set
@@ -55,9 +54,10 @@ public class FFmpegJava implements Closeable {
     }
 
     @Override
-    public synchronized void close() {
+    public void close() {
         synchronized (REFERENCE) {
             destroy(this);
+            visPointer = 0L;
             finalize();
         }
     }
@@ -85,10 +85,6 @@ public class FFmpegJava implements Closeable {
         }
 
         record(videoAddr, outputFilePath, recordSeconds, useGpu);
-    }
-
-    public interface GrabListener {
-        void grab(ImageBuffer imageBuffer) throws IOException;
     }
 
     private native void init(FFmpegJava handle, FFmpegInputParams params, VideoConnectedResult result);

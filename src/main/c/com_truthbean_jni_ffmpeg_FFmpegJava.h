@@ -3,9 +3,9 @@
 #define _Included_com_truthbean_jni_ffmpeg_FFmpegJava
 
 #include <string.h>
-
+#include <stdlib.h>
 #ifdef _WIN32
-
+#include <malloc.h>
 #else
 
 #include <pthread.h>
@@ -22,21 +22,21 @@
 /*
  * Class:     com_truthbean_jni_ffmpeg_FFmpegJava
  * Method:    init
- * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/FFmpegInputParams;Lcom/truthbean/ffmpeg/model/VideoConnectedResult;)
+ * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/FFmpegInputParams;Lcom/truthbean/ffmpeg/model/VideoConnectedResult;)V
  */
 JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_init(JNIEnv *env, jobject obj, jobject handle, jobject params, jobject result);
 
 /*
  * Class:     com_truthbean_jni_ffmpeg_FFmpegJava
  * Method:    getImageBuffer
- * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/ImageBufferParams;Lcom/truthbean/ffmpeg/model/ImageBuffer;)
+ * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/ImageBufferParams;Lcom/truthbean/ffmpeg/model/ImageBuffer;)V
  */
 JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBuffer(JNIEnv *env, jobject obj, jobject handle, jobject params, jobject result);
 
 /*
  * Class:     com_truthbean_jni_ffmpeg_FFmpegJava
  * Method:    getImageBufferThreadly
- * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/ImageBufferParams;Lcom/truthbean/ffmpeg/model/ImageBuffer;)
+ * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/ImageBufferParams;Lcom/truthbean/ffmpeg/GrabListener;)V
  */
 JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBufferThreadly(JNIEnv *env, jobject obj, jobject handle, jobject params, jobject listener);
 

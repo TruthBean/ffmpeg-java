@@ -58,7 +58,7 @@ public class FFmpegJavaTest {
         if (imageBuffer != null) {
             System.out.println(imageBuffer.getSize());
 
-            String projectDir = System.getProperty("user.dir");
+            /*String projectDir = System.getProperty("user.dir");
             String imageFileName = projectDir + "/images/buffer" + i + ".jpeg";
             File imageFile = new File(imageFileName);
             if (!imageFile.exists()) {
@@ -67,7 +67,7 @@ public class FFmpegJavaTest {
             FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
             fileOutputStream.write(imageBuffer.getData());
             fileOutputStream.flush();
-            fileOutputStream.close();
+            fileOutputStream.close();*/
 
             imageBuffer.finalize();
             imageBuffer = null;
@@ -100,7 +100,7 @@ public class FFmpegJavaTest {
             params.setVideoAddr(addr);
             params.setTimeout(2 * 500000);
             params.setGpuId(0);
-            params.setLevel(AvLogLevel.INFO);
+            params.setLevel(AvLogLevel.DEBUG);
             params.setNobuffer(false);
             params.setUseGpu(false);
             params.setUseTcp(true);
@@ -126,10 +126,13 @@ public class FFmpegJavaTest {
                     // imageBuffer = null;
                 }
 
-                /*ffmepg.doGrab(imageBufferParams, image -> {
-                    System.out.println(image);
-                    System.out.println(image.getSize());
-                    saveImage(image, i.getAndIncrement());
+                /*ffmpeg.doGrab(imageBufferParams, new GrabListener() {
+                    @Override
+                    public void grab(ImageBuffer imageBuffer) throws IOException {
+                        System.out.println(imageBuffer);
+                        System.out.println(imageBuffer.getSize());
+                        saveImage(imageBuffer, i.getAndIncrement());
+                    }
                 });*/
             }
         } catch (Exception e) {
@@ -167,7 +170,9 @@ public class FFmpegJavaTest {
         // thread.setDaemon(true);
         // thread.start();
 
-        doubleThreadPool.execute(thread);
+        // doubleThreadPool.execute(thread);
+
+        test.producer();
 
         /*for (int i = 0; i <= 1000; i++) {
             System.out.println(i);

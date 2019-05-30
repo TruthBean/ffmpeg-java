@@ -264,12 +264,11 @@ void copy_frame_data_and_transform_to_jpeg(const AVCodecContext *codec_context, 
     jpeg_write_mem(images_dst_data[0], result->quality, (unsigned int)target_width,
                     (unsigned int)target_height, &jpeg_data, &jpeg_size);
 	av_log(NULL, AV_LOG_DEBUG, "jpeg_size %ld \n", jpeg_size);
-    // result->file_data = (unsigned char *)malloc((size_t)(jpeg_size));
+    result->file_data = (unsigned char *)malloc((size_t)(jpeg_size));
 	// memset(result->file_data, 0, jpeg_size);
-    // memcpy(result->file_data, jpeg_data, jpeg_size);
-    // free(jpeg_data);
-    // jpeg_data = NULL;
-	result->file_data = jpeg_data;
+    memcpy(result->file_data, jpeg_data, jpeg_size);
+    free(jpeg_data);
+    jpeg_data = NULL;
 
     result->file_size = jpeg_size;
 

@@ -149,9 +149,6 @@ static void callback_frame(const AVCodecContext *video_codec_context, FrameData 
                 data->error_message = "image data is null";
             }
         }
-        if (!data->isThreadly && data->frame != NULL) {
-            data->frame = NULL;
-        }
     }
 }
 
@@ -208,7 +205,7 @@ static void grab_image(void *data) {
 
                 if (share_data->ret == 0) {
                     // size
-                    jmethodID size_id = (*env)->GetMethodID(env, result_class, "setSize", "(J)V");
+                    jmethodID size_id = (*env)->GetMethodID(env, result_class, "setSize", "(I)V");
                     (*env)->CallVoidMethod(env, result, size_id, share_data->file_size);
 
                     if (share_data->file_size > 0) {
@@ -298,6 +295,11 @@ static void callback_frame_threadly(const AVCodecContext *video_codec_context, F
     sem_post(&semaphore);
 }
 
+/*
+ * Class:     com_truthbean_jni_ffmpeg_FFmpegJava
+ * Method:    getImageBufferThreadly
+ * Signature: (Lcom/truthbean/ffmpeg/FFmpegJava;Lcom/truthbean/ffmpeg/model/ImageBufferParams;Lcom/truthbean/ffmpeg/GrabListener;)V
+ */
 JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBufferThreadly(JNIEnv *env, jobject obj, jobject handle, jobject params, jobject listener)
 {
 
@@ -309,7 +311,7 @@ JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBufferThread
 
     // `````````````````````````````````````````````````````````````````````````````````````````````````````````
 
-    av_log(NULL, AV_LOG_DEBUG, "Java_com_truthbean_ffmpeg_FFmpegJava_getImageBuffer start \n");
+    av_log(NULL, AV_LOG_DEBUG, "Java_com_truthbean_ffmpeg_FFmpegJava_getImageBufferThreadly start \n");
     // visPointer
     jclass handle_class = (*env)->GetObjectClass(env, handle);
     jmethodID handle_id = (*env)->GetMethodID(env, handle_class, "getVisPointer", "()J");
@@ -399,7 +401,7 @@ JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBuffer(JNIEn
 
     if (frameData.ret == 0) {
         // size
-        jmethodID size_id = (*env)->GetMethodID(env, result_class, "setSize", "(J)V");
+        jmethodID size_id = (*env)->GetMethodID(env, result_class, "setSize", "(I)V");
         (*env)->CallVoidMethod(env, result, size_id, frameData.file_size);
 
         if (frameData.file_size > 0) {
@@ -411,10 +413,7 @@ JNIEXPORT void JNICALL Java_com_truthbean_ffmpeg_FFmpegJava_getImageBuffer(JNIEn
             (*env)->CallVoidMethod(env, result, data_id, _data_array);
 
 			// 释放 图片数据 的 内存
-#ifndef _WIN32
-			av_freep(&frameData.file_data);
 			free(frameData.file_data);
-#endif // _WIN32
 			frameData.file_data = NULL;
 
             (*env)->DeleteLocalRef(env, _data_array);

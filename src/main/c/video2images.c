@@ -259,43 +259,43 @@ void open_inputfile(Video2ImageStream *result, FFmpegInputParams params) {
  * 释放内存
  */
 void release(Video2ImageStream *vis) {
-    av_log(NULL, AV_LOG_DEBUG, "---> 3 ---> free memory\n");
+	if (vis != NULL) {
+		av_log(NULL, AV_LOG_DEBUG, "---> 3 ---> free memory\n");
 
-    av_log(NULL, AV_LOG_DEBUG, "pointer %p \n", vis);
+		av_log(NULL, AV_LOG_DEBUG, "pointer %p \n", vis);
 
-    int ret;
-    if (vis->video_codec_context != NULL) {
-        av_log(NULL, AV_LOG_DEBUG, "avcodec_close ... \n");
-        ret = avcodec_close(vis->video_codec_context);
-        if (ret < 0) {
-            av_log(NULL, AV_LOG_ERROR, "avcodec_close error \n");
-        }
-    }
+		int ret;
+		if (vis->video_codec_context != NULL) {
+			av_log(NULL, AV_LOG_DEBUG, "avcodec_close ... \n");
+			ret = avcodec_close(vis->video_codec_context);
+			if (ret < 0) {
+				av_log(NULL, AV_LOG_ERROR, "avcodec_close error \n");
+			}
+		}
 
-    if (vis->video_codec_context != NULL) {
-        av_log(NULL, AV_LOG_DEBUG, "avcodec_free_context ... \n");
-        avcodec_free_context(&(vis->video_codec_context));
-        vis->video_codec_context = NULL;
-    }
+		if (vis->video_codec_context != NULL) {
+			av_log(NULL, AV_LOG_DEBUG, "avcodec_free_context ... \n");
+			avcodec_free_context(&(vis->video_codec_context));
+			vis->video_codec_context = NULL;
+		}
 
-    if (vis->format_context != NULL) {
-        av_log(NULL, AV_LOG_DEBUG, "avformat_close_input ... \n");
-        avformat_close_input(&(vis->format_context));
-        avformat_free_context(vis->format_context);
-        vis->format_context = NULL;
-    }
+		if (vis->format_context != NULL) {
+			av_log(NULL, AV_LOG_DEBUG, "avformat_close_input ... \n");
+			avformat_close_input(&(vis->format_context));
+			avformat_free_context(vis->format_context);
+			vis->format_context = NULL;
+		}
 
 
-    av_log(NULL, AV_LOG_DEBUG, "avformat_network_deinit ... \n");
-    ret = avformat_network_deinit();
-    if (ret < 0) {
-        av_log(NULL, AV_LOG_ERROR, "avformat_network_deinit error \n");
-    }
+		av_log(NULL, AV_LOG_DEBUG, "avformat_network_deinit ... \n");
+		ret = avformat_network_deinit();
+		if (ret < 0) {
+			av_log(NULL, AV_LOG_ERROR, "avformat_network_deinit error \n");
+		}
 
-#ifndef _WIN32
-	free(vis);
-#endif // !_WIN32
-    vis = NULL;
+		free(vis);
+		vis = NULL;
+	}
 }
 
 static void video2images_grab_close(AVFrame *frame, AVPacket *packet) {
@@ -454,7 +454,8 @@ void video2images_grab(Video2ImageStream *vis, int quality, int chose_frames, en
             usleep(0);
 #endif // _WIN32
 
-            av_packet_unref(orig_pkt);
+			if (orig_pkt != NULL)
+				av_packet_unref(orig_pkt);
         }
     }
 

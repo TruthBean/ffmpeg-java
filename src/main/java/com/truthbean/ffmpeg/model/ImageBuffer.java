@@ -4,7 +4,7 @@ public class ImageBuffer {
     private int code;
     private String message;
 
-    private long size;
+    private int size;
     private byte[] data;
 
     /**
@@ -17,7 +17,7 @@ public class ImageBuffer {
     /**
      * @param size the size to set
      */
-    public void setSize(long size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
@@ -31,7 +31,7 @@ public class ImageBuffer {
     /**
      * @return the size
      */
-    public long getSize() {
+    public int getSize() {
         return size;
     }
 
@@ -55,8 +55,20 @@ public class ImageBuffer {
     public synchronized void finalize() {
         try {
             super.finalize();
+            data = null;
+            System.gc();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    public ImageBuffer deepClone() {
+        ImageBuffer imageBuffer = new ImageBuffer();
+        imageBuffer.code = code;
+        imageBuffer.message = message;
+        imageBuffer.size = size;
+        imageBuffer.data = new byte[Math.toIntExact(size)];
+        System.arraycopy(data, 0, imageBuffer.data, 0, size);
+        return imageBuffer;
     }
 }
