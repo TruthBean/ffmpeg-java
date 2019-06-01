@@ -7,8 +7,6 @@
  **/
 void open_inputfile(Video2ImageStream *result, FFmpegInputParams params) {
 
-    av_log(NULL, AV_LOG_DEBUG, "...........\n");
-
     result->video_stream_idx = -1;
 
     result->video_stream = NULL;

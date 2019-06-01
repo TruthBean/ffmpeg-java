@@ -1,3 +1,14 @@
+#FFmpeg-Java
+
+### maven
+```xml
+<dependency>
+    <groupId>com.truthbean</groupId>
+    <artifactId>ffmpeg</artifactId>
+    <version>0.0.1-RELEASE</version>
+</dependency>
+```
+
 ```
 1. 先编写java 代码, 预留native接口
 
